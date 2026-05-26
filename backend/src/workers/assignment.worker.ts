@@ -59,6 +59,8 @@ export const assignmentWorker = new Worker(
         questionTypes: assignment.questionTypes,
 
         additionalInstructions: assignment.additionalInstructions || "",
+
+        extractedText: assignment.extractedText || "",
       });
 
       if (io) {

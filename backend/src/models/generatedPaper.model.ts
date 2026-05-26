@@ -1,53 +1,44 @@
 import mongoose from "mongoose";
 
-const questionSchema =
-  new mongoose.Schema(
-    {
-      question: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-
-      difficulty: {
-        type: String,
-        enum: [
-          "easy",
-          "medium",
-          "hard",
-        ],
-        required: true,
-      },
-
-      marks: {
-        type: Number,
-        required: true,
-        min: 1,
-      },
-
-      type: {
-        type: String,
-        enum: [
-          "short-answer",
-          "long-answer",
-          "mcq",
-          "true-false",
-        ],
-        required: true,
-      },
-
-      options: {
-        type: [String],
-        default: [],
-      },
-
-      answer: {
-        type: String,
-        default: "",
-      },
+const questionSchema = new mongoose.Schema(
+  {
+    question: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    { _id: false },
-  );
+
+    difficulty: {
+      type: String,
+      enum: ["easy", "medium", "hard"],
+      required: true,
+    },
+
+    marks: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+
+    type: {
+      type: String,
+      enum: ["short-answer", "long-answer", "mcq", "true-false"],
+      required: true,
+    },
+
+    options: {
+      type: [String],
+      default: [],
+    },
+
+    answer: {
+      type: String,
+      default: "",
+    },
+  },
+
+  { _id: false },
+);
 
 const sectionSchema = new mongoose.Schema(
   {
