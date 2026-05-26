@@ -13,16 +13,14 @@ const workerRedisConnection = new Redis(redisUrl, redisConnectionOptions);
 export const assignmentWorker = new Worker(
   "generate-assignment",
   async (job) => {
-    console.log("=================================");
     console.log("New Job Received");
     console.log("Job ID:", job.id);
     console.log("Job Data:", job.data);
-    console.log("=================================");
+
 
     try {
       console.log("Processing assignment generation...");
 
-      // Simulate AI Processing
       await new Promise((resolve) => setTimeout(resolve, 5000));
 
       console.log("Assignment generated successfully");
@@ -38,11 +36,10 @@ export const assignmentWorker = new Worker(
   },
   {
     connection: workerRedisConnection,
-    concurrency: 5, // Processes up to 5 jobs concurrently
+    concurrency: 5,
   }
 );
 
-// Event Listeners
 assignmentWorker.on("completed", (job) => {
   console.log(`Job ${job.id} completed successfully`);
 });
