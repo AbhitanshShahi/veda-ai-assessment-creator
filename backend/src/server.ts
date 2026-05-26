@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 import { connectDB } from "./lib/db.js";
 import redisClient from "./lib/redis.js";
 import { assignmentWorker } from "./workers/assignment.worker.js";
+import assignmentRouter from "./routes/assignment.route.js";
 
 dotenv.config();
 
@@ -27,6 +28,8 @@ app.use(cors());
 app.use(express.json());
 
 await connectDB();
+
+app.use("/api/assignments", assignmentRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).json({
