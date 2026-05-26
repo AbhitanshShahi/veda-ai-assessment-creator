@@ -55,4 +55,4 @@ export const generatedPaperSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const GeneratePaper = mongoose.model("GeneratedPaper", generatedPaperSchema);
+export const GeneratedPaper = mongoose.model("GeneratedPaper", generatedPaperSchema);

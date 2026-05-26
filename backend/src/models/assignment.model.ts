@@ -12,7 +12,7 @@ export interface Assignment {
   additionalInstructions?: string;
   uploadedFileUrl?: string;
   uploadedFileName?: string;
-  uploadedFileType?: "pdf" | "text";
+  uploadedFileType?: "pdf"| "docx" | "text";
   uploadedFileMimeType?: string;
   uploadedFileSize?: number;
   status: "queued" | "processing" | "completed" | "failed";
@@ -98,7 +98,7 @@ const assignmentSchema = new mongoose.Schema<Assignment>(
     },
     uploadedFileType: {
       type: String,
-      enum: ["pdf", "text"] as const,
+      enum: ["pdf", "docx", "text"] as const,
       default: undefined,
     },
 

@@ -3,12 +3,19 @@ import { AssignmentModel } from "../models/assignment.model.js";
 import { assignmentQueue } from "../queues/assignment.queue.js";
 import { createAssignmentSchema } from "../schemas/assignment.schema.js";
 import {generatedPaperSchema} from "../models/generatedPaper.model.js";
+import mongoose from "mongoose";
 
 export const generateAssignment = async (
   req: Request,
   res: Response
 ) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id as string)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid assignment ID format",
+      });
+    }
     const validatedData =
       createAssignmentSchema.parse(req.body);
 
