@@ -13,29 +13,74 @@ export const questionTypeEnum = z.enum([
   "true-false",
 ]);
 
-const baseQuestionSchema = z.object({
-  question: z
-    .string()
-    .min(1, "Question is required"),
+const baseQuestionSchema =
+  z.object({
+    question: z
+      .string()
+      .min(
+        1,
+        "Question is required",
+      ),
 
-  difficulty: difficultyEnum,
+    difficulty:
+      difficultyEnum,
 
-  marks: z
-    .number()
-    .min(1, "Marks must be at least 1"),
-});
+    marks: z
+      .number()
+      .min(
+        1,
+        "Marks must be at least 1",
+      ),
+  });
 
 const mcqQuestionSchema =
   baseQuestionSchema.extend({
-    type: z.literal("mcq"),
+    type:
+      z.literal("mcq"),
 
     options: z
-      .array(z.string())
-      .min(2, "MCQ requires at least 2 options"),
+      .array(
+        z.string(),
+      )
+      .min(
+        4,
+        "MCQ must have 4 options",
+      )
+      .max(
+        4,
+        "MCQ must have exactly 4 options",
+      ),
 
     answer: z
       .string()
-      .min(1, "MCQ answer is required"),
+      .min(
+        1,
+        "MCQ answer is required",
+      ),
+  });
+
+const trueFalseQuestionSchema =
+  baseQuestionSchema.extend({
+    type:
+      z.literal(
+        "true-false",
+      ),
+
+    options: z
+      .array(
+        z.string(),
+      )
+      .length(
+        2,
+        "True/False must contain exactly 2 options",
+      ),
+
+    answer: z
+      .string()
+      .min(
+        1,
+        "True/False answer is required",
+      ),
   });
 
 const normalQuestionSchema =
@@ -43,7 +88,6 @@ const normalQuestionSchema =
     type: z.enum([
       "short-answer",
       "long-answer",
-      "true-false",
     ]),
   });
 
@@ -52,6 +96,9 @@ export const generatedQuestionSchema =
     "type",
     [
       mcqQuestionSchema,
+
+      trueFalseQuestionSchema,
+
       normalQuestionSchema,
     ],
   );
@@ -65,7 +112,8 @@ export const generatedSectionSchema =
         "Section title is required",
       ),
 
-    instruction: z.string(),
+    instruction:
+      z.string(),
 
     questions: z
       .array(

@@ -7,6 +7,8 @@ import { connectDB } from "./lib/db.js";
 import redisClient from "./lib/redis.js";
 import { assignmentWorker } from "./workers/assignment.worker.js";
 import assignmentRouter from "./routes/assignment.route.js";
+import authRouter from "./routes/auth.route.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -24,11 +26,14 @@ export const io = new Server(httpServer, {
 });
 
 // Middleware
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 await connectDB();
 
+app.use("/api/auth", authRouter);
 app.use("/api/assignments", assignmentRouter);
 
 app.get("/health", (req, res) => {

@@ -12,14 +12,16 @@ export interface Assignment {
   additionalInstructions?: string;
   uploadedFileUrl?: string;
   uploadedFileName?: string;
-  uploadedFileType?: "pdf"| "docx" | "text";
+  uploadedFileType?: "pdf" | "docx" | "text";
   uploadedFileMimeType?: string;
   uploadedFileSize?: number;
+  extractedText?: string;
   status: "queued" | "processing" | "completed" | "failed";
   generatedPaperId?: mongoose.Types.ObjectId;
   generationError?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  createdBy: mongoose.Types.ObjectId;
 }
 
 const assignmentSchema = new mongoose.Schema<Assignment>(
@@ -111,6 +113,15 @@ const assignmentSchema = new mongoose.Schema<Assignment>(
       type: Number,
       default: 0,
     },
+    extractedText: {
+      type: String,
+      default: "",
+    },
+    createdBy: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "User",
+  required: true,
+},
   },
   { timestamps: true },
 );
