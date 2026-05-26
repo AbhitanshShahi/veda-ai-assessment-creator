@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { connectDB } from "./lib/db.js";
+import redisClient from "./lib/redis.js";
+import { assignmentWorker } from "./workers/assignment.worker.js";
 
 dotenv.config();
 
