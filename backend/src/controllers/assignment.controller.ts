@@ -10,12 +10,6 @@ export const generateAssignment = async (
   res: Response
 ) => {
   try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id as string)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid assignment ID format",
-      });
-    }
     const validatedData =
       createAssignmentSchema.parse(req.body);
 
@@ -68,6 +62,13 @@ export const getAssignmentById = async (
   res: Response
 ) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id as string)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid assignment ID format",
+      });
+    }
+
     const assignment = await AssignmentModel
       .findById(req.params.id)
       .populate("generatedPaperId");
