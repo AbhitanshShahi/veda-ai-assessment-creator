@@ -159,3 +159,33 @@ export const getAssignmentById = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getAssignments = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const assignments = await AssignmentModel.find({
+      createdBy: userId,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      assignments,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
