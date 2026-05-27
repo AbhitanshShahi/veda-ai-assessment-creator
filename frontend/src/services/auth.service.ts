@@ -26,10 +26,10 @@ export const login = async (data: LoginData) => {
 }
 
 export const logout = async () => {
-  const response = await api.post("/auth/logout")
+  const response = await api.post("/auth/logout");
 
-  return response.data
-}
+  return response.data;
+};
 
 export const getMe = async () => {
   const response = await api.get("/auth/me")
