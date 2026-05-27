@@ -22,7 +22,7 @@ const questionSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: ["short-answer", "long-answer", "mcq", "true-false"],
+      enum: ["short-answer", "long-answer", "mcq", "true-false", "diagram"],
       required: true,
     },
 

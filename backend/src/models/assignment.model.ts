@@ -8,7 +8,12 @@ export interface Assignment {
   questionCount: number;
   totalMarks: number;
   difficulty: "easy" | "medium" | "hard";
-  questionTypes: string[];
+  questionTypes: {
+    type: string;
+    questions: number;
+    marks: number;
+    difficulty: "easy" | "medium" | "hard";
+  }[];
   additionalInstructions?: string;
   uploadedFileUrl?: string;
   uploadedFileName?: string;
@@ -57,14 +62,30 @@ const assignmentSchema = new mongoose.Schema<Assignment>(
 
     difficulty: {
       type: String,
-      enum: ["easy", "medium", "hard"] as const,
+
+      enum: ["easy", "medium", "hard"],
+
       required: true,
     },
 
-    questionTypes: {
-      type: [String],
-      default: [],
-    },
+    questionTypes: [
+      {
+        type: {
+          type: String,
+          required: true,
+        },
+
+        questions: {
+          type: Number,
+          required: true,
+        },
+
+        marks: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
 
     additionalInstructions: {
       type: String,
@@ -118,10 +139,10 @@ const assignmentSchema = new mongoose.Schema<Assignment>(
       default: "",
     },
     createdBy: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "User",
-  required: true,
-},
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true },
 );
