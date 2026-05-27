@@ -1,17 +1,25 @@
-import Sidebar from "@/components/dashboard/sidebar"
+import Sidebar from "@/components/dashboard/sidebar";
+import Topbar from "@/components/dashboard/topbar";
+import MobileNavbar from "@/components/dashboard/mobile-navbar";
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-[#f3f3f3]">
-      <Sidebar />
+    <div className="min-h-screen bg-[#f3f3f3]">
+      <div className="flex">
+        <Sidebar />
 
-      <main className="flex-1">
-        {children}
-      </main>
+        <div className="flex-1">
+          <Topbar title="Assignments" />
+
+          <main className="px-3 pb-24 pt-4 lg:px-4 lg:pb-6">{children}</main>
+        </div>
+      </div>
+
+      <MobileNavbar />
     </div>
-  )
+  );
 }
