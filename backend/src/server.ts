@@ -27,9 +27,14 @@ export const io = new Server(httpServer, {
 
 // Middleware
 app.use(cookieParser());
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "*",
+    credentials: true,
+  })
+)
 
 await connectDB();
 
@@ -44,15 +49,15 @@ app.get("/health", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log(`📡 Client connected: ${socket.id}`);
+  console.log(`Client connected: ${socket.id}`);
 
   socket.on("join-assessment-room", (assessmentId: string) => {
     socket.join(assessmentId);
-    console.log(`👥 Client ${socket.id} joined room: ${assessmentId}`);
+    console.log(`Client ${socket.id} joined room: ${assessmentId}`);
   });
 
   socket.on("disconnect", () => {
-    console.log(`❌ Client disconnected: ${socket.id}`);
+    console.log(`Client disconnected: ${socket.id}`);
   });
 });
 
