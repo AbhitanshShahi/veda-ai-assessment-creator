@@ -38,8 +38,11 @@ export const signup = async (req: Request, res: Response) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+
+      secure: process.env.NODE_ENV === "production",
+
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -97,13 +100,12 @@ export const login = async (req: Request, res: Response) => {
     res.cookie("token", token, {
       httpOnly: true,
 
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
 
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
     res.status(200).json({
       success: true,
 
