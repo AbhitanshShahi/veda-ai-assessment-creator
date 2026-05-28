@@ -28,7 +28,7 @@ export default function EmptyAssignmentState() {
 
         <button
           onClick={() =>
-            router.push("/dashboard/assignments/create")
+            router.push("/dashboard/assignment/create")
           }
           className="mt-7 flex h-11 items-center justify-center gap-2 rounded-full bg-black px-6 text-sm font-medium text-white transition-all hover:bg-black/90"
         >

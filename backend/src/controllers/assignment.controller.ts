@@ -26,6 +26,7 @@ export const generateAssignment = async (req: Request, res: Response) => {
       req.body.questionTypes = JSON.parse(req.body.questionTypes);
     }
 
+    console.log(req.body);
     const validatedData = createAssignmentSchema.parse(req.body);
 
     let uploadedFileUrl = "";
@@ -118,7 +119,7 @@ export const generateAssignment = async (req: Request, res: Response) => {
     res.status(400).json({
       success: false,
 
-      message: error.message,
+      message: error?.errors || error.message,
     });
   }
 };
@@ -160,10 +161,7 @@ export const getAssignmentById = async (req: Request, res: Response) => {
   }
 };
 
-export const getAssignments = async (
-  req: Request,
-  res: Response
-) => {
+export const getAssignments = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
 
@@ -181,6 +179,43 @@ export const getAssignments = async (
     res.status(200).json({
       success: true,
       assignments,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const deleteAssignment = async (req: Request, res: Response) => {
+  try {
+    const assignmentId = req.params.id as string;
+    const userId = req.user?._id;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: User not found",
+      });
+    }
+
+    const assignment = await AssignmentModel.findOne({
+      _id: assignmentId,
+      createdBy: userId as mongoose.Types.ObjectId,
+    });
+
+    if (!assignment) {
+      return res.status(404).json({
+        success: false,
+        message: "Assignment not found",
+      });
+    }
+
+    await AssignmentModel.findByIdAndDelete(assignmentId);
+
+    res.status(200).json({
+      success: true,
+      message: "Assignment deleted successfully",
     });
   } catch (error: any) {
     res.status(500).json({

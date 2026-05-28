@@ -41,8 +41,11 @@ const trueFalseQuestionSchema = baseQuestionSchema.extend({
 
 const normalQuestionSchema = baseQuestionSchema.extend({
   type: z.enum(["short-answer", "long-answer", "diagram"]),
-});
 
+  options: z.array(z.string()).default([]),
+
+  answer: z.string().default(""),
+});
 export const generatedQuestionSchema = z.discriminatedUnion("type", [
   mcqQuestionSchema,
 

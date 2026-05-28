@@ -117,8 +117,8 @@ Group questions into logical sections based on question type.
 
 Example:
 - Section A → MCQs
-- Section B → Short Questions
-- Section C → Long Questions
+- Section B → Short Answer Questions
+- Section C → Long Answer Questions
 - Section D → Diagram Questions
 
 Each section MUST contain:
@@ -140,13 +140,39 @@ For MCQ questions:
 - Ensure conceptual quality
 
 ==================================================
+
 TRUE/FALSE RULES
+
 ==================================================
 
 For true-false questions:
-- Include answer field
-- Statements should require actual understanding
-- Avoid extremely obvious statements
+
+- ALWAYS include:
+  "options": ["True", "False"]
+
+- ALWAYS include:
+  "answer": "True"
+  OR
+  "answer": "False"
+
+- NEVER return boolean values
+
+- NEVER return:
+  true
+  false
+
+- answer MUST always be a STRING
+
+- Example valid format:
+
+{
+  "question": "Virtual memory improves memory utilization.",
+  "difficulty": "easy",
+  "marks": 1,
+  "type": "true-false",
+  "options": ["True", "False"],
+  "answer": "True"
+}
 
 ==================================================
 SHORT QUESTION RULES
@@ -210,20 +236,32 @@ STRICT OUTPUT RULES
 8. Do NOT include any text outside JSON
 
 ==================================================
-VALID VALUES
+STRICT TYPE RULES
 ==================================================
 
-difficulty:
-- easy
-- medium
-- hard
+IMPORTANT:
 
-question types:
-- mcq
-- short
-- long
-- true-false
-- diagram
+You MUST use ONLY these EXACT values for the "type" field.
+
+Allowed values:
+
+- "mcq"
+- "short-answer"
+- "long-answer"
+- "true-false"
+- "diagram"
+
+DO NOT use:
+- "short"
+- "long"
+- "essay"
+- "descriptive"
+- "multiple-choice"
+- "truefalse"
+- any synonym
+- any variation
+
+The response will FAIL validation if exact values are not used.
 
 ==================================================
 REQUIRED JSON FORMAT
@@ -236,13 +274,13 @@ REQUIRED JSON FORMAT
       "instruction": "Attempt all questions",
       "questions": [
         {
-          "question": "What is process scheduling?",
-          "difficulty": "easy",
-          "marks": 2,
-          "type": "short",
-          "options": [],
-          "answer": ""
-        }
+  "question": "What is process scheduling?",
+  "difficulty": "easy",
+  "marks": 2,
+  "type": "short-answer",
+  "options": [],
+  "answer": ""
+}
       ]
     }
   ]
