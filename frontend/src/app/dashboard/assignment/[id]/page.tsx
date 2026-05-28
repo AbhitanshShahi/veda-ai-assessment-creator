@@ -57,7 +57,9 @@ export default function AssignmentPaperPage() {
   useEffect(() => {
     socket.connect();
 
-    socket.emit("join-assessment-room", id);
+    socket.on("connect", () => {
+      socket.emit("join-assessment-room", id);
+    });
 
     socket.on("generation-progress", (data) => {
       setProgress(data.progress);

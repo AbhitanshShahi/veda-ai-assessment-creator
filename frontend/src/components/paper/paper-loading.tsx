@@ -1,6 +1,7 @@
 "use client";
 
 import { Brain, CheckCircle2, FileText, Loader2, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Props {
   progress: number;
@@ -42,6 +43,21 @@ const steps = [
 
 export default function PaperLoading({ progress, step }: Props) {
   const activeIndex = steps.findIndex((item) => item.key === step);
+  const [displayProgress, setDisplayProgress] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDisplayProgress((prev) => {
+        if (prev >= progress) {
+          return prev;
+        }
+
+        return prev + 1;
+      });
+    }, 60);
+
+    return () => clearInterval(interval);
+  }, [progress]);
 
   return (
     <div className="mx-auto flex min-h-[85vh] max-w-6xl items-center justify-center px-6 py-10">
@@ -68,7 +84,7 @@ export default function PaperLoading({ progress, step }: Props) {
               <div
                 className="h-full rounded-full bg-black transition-all duration-700"
                 style={{
-                  width: `${progress}%`,
+                  width: `${displayProgress}%`,
                 }}
               />
             </div>
@@ -78,7 +94,7 @@ export default function PaperLoading({ progress, step }: Props) {
                 {steps[activeIndex]?.label || "Generating..."}
               </p>
 
-              <p className="text-lg font-semibold">{progress}%</p>
+              <p className="text-lg font-semibold">{displayProgress}%</p>
             </div>
           </div>
 
