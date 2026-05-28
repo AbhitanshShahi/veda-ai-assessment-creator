@@ -20,8 +20,11 @@ const PORT = process.env.PORT || 8000;
 // Initialize Socket.io
 export const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || "*",
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+
     methods: ["GET", "POST"],
+
+    credentials: true,
   },
 });
 
@@ -33,8 +36,8 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL || "*",
     credentials: true,
-  })
-)
+  }),
+);
 
 await connectDB();
 

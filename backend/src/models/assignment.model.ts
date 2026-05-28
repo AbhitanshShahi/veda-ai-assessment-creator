@@ -7,7 +7,6 @@ export interface Assignment {
   dueDate: Date;
   questionCount: number;
   totalMarks: number;
-  difficulty: "easy" | "medium" | "hard";
   questionTypes: {
     type: string;
     questions: number;
@@ -60,14 +59,6 @@ const assignmentSchema = new mongoose.Schema<Assignment>(
       min: 1,
     },
 
-    difficulty: {
-      type: String,
-
-      enum: ["easy", "medium", "hard"],
-
-      required: true,
-    },
-
     questionTypes: [
       {
         type: {
@@ -82,6 +73,12 @@ const assignmentSchema = new mongoose.Schema<Assignment>(
 
         marks: {
           type: Number,
+          required: true,
+        },
+
+        difficulty: {
+          type: String,
+          enum: ["easy", "medium", "hard"],
           required: true,
         },
       },

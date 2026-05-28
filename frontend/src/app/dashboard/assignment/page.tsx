@@ -16,6 +16,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import axios from "axios";
 
 export default function AssignmentsPage() {
   const router = useRouter();
@@ -49,6 +56,21 @@ export default function AssignmentsPage() {
 
     return filtered;
   }, [assignments, searchQuery, sortBy]);
+
+  const handleDeleteAssignment = async (assignmentId: string) => {
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/assignments/${assignmentId}`,
+        {
+          withCredentials: true,
+        },
+      );
+
+      await fetchAssignments();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     if (!isCheckingAuth && !isAuthenticated) {
@@ -137,20 +159,51 @@ export default function AssignmentsPage() {
         {filteredAssignments.map((assignment) => (
           <Card
             key={assignment._id}
-            className="group rounded-[28px] border-border bg-card/80 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/5"
+            onClick={(e) => {
+              e.stopPropagation();
+
+              router.push(`/dashboard/assignment/${assignment._id}`);
+            }}
+            className="group rounded-[28px] curosor-pointer border-border bg-card/80 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/5"
           >
             <div className="flex items-start justify-between">
               <h2 className="max-w-[80%] text-[24px] font-bold tracking-[-0.04em] text-foreground transition-colors duration-300 group-hover:text-black/80">
                 {assignment.title}
               </h2>
 
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 rounded-full transition-all duration-300 hover:scale-110 hover:bg-black/5"
-              >
-                <MoreVertical className="h-5 w-5 text-muted-foreground" />
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => e.stopPropagation()}
+                    className="h-8 w-8 rounded-full transition-all duration-300 hover:scale-110 hover:bg-black/5"
+                  >
+                    <MoreVertical className="h-5 w-5 text-muted-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent align="end" className="w-40 rounded-2xl">
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push(`/dashboard/assignment/${assignment._id}`)
+                    }
+                    className="cursor-pointer"
+                  >
+                    Open Assignment
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteAssignment(assignment._id);
+                    }}
+                    className="cursor-pointer text-red-500 focus:text-red-500"
+                  >
+                    Delete Assignment
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             <div className="mt-10 flex items-center justify-between">
@@ -178,7 +231,7 @@ export default function AssignmentsPage() {
 
       <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
         <Button
-          onClick={() => router.push("/dashboard/assignments/create")}
+          onClick={() => router.push("/dashboard/assignment/create")}
           className="h-12 rounded-full border border-[#ff7a45] bg-black px-6 text-sm font-medium text-white shadow-[0_10px_40px_rgba(255,122,69,0.25)] transition-all duration-300 hover:scale-[1.03] hover:bg-black/95 hover:shadow-[0_15px_50px_rgba(255,122,69,0.35)] active:scale-[0.98]"
         >
           <Plus className="mr-2 h-5 w-5" />

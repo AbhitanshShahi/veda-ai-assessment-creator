@@ -103,7 +103,14 @@ export default function CreateAssignmentPage() {
 
       formData.append("additionalInstructions", instructions);
 
-      formData.append("questionTypes", JSON.stringify(rows));
+      formData.append(
+        "questionTypes",
+        JSON.stringify(
+          rows.map(({ id, ...rest }) => ({
+            ...rest,
+          })),
+        ),
+      );
 
       if (file) {
         formData.append("file", file);
@@ -119,7 +126,7 @@ export default function CreateAssignmentPage() {
 
       const assignmentId = response.data.assignmentId;
 
-      router.push(`/dashboard/assignments/${assignmentId}`);
+      router.push(`/dashboard/assignment/${assignmentId}`);
     } catch (error) {
       console.error(error);
     } finally {
