@@ -1,24 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
 import axios from "axios";
-
 import { useRouter } from "next/navigation";
-
 import { ArrowRight, Circle, Plus } from "lucide-react";
-
 import AssignmentUpload from "@/components/dashboard/create-assignment/assignment-upload";
-
 import AssignmentQuestionRow from "@/components/dashboard/create-assignment/assignment-question-row";
-
 import { Button } from "@/components/ui/button";
-
 import { Card } from "@/components/ui/card";
-
 import { Input } from "@/components/ui/input";
-
 import { Textarea } from "@/components/ui/textarea";
+import toast from "react-hot-toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
@@ -86,6 +78,8 @@ export default function CreateAssignmentPage() {
   };
 
   const handleGenerate = async () => {
+    const toastId = toast.loading("Creating assignment...");
+
     try {
       setIsGenerating(true);
 
@@ -124,11 +118,19 @@ export default function CreateAssignmentPage() {
         },
       );
 
+      toast.success("Assignment queued successfully", {
+        id: toastId,
+      });
+
       const assignmentId = response.data.assignmentId;
 
       router.push(`/dashboard/assignment/${assignmentId}`);
     } catch (error) {
       console.error(error);
+
+      toast.error("Failed to create assignment", {
+        id: toastId,
+      });
     } finally {
       setIsGenerating(false);
     }

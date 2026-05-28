@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { socket } from "@/lib/socket";
@@ -11,6 +11,8 @@ import PaperSection from "@/components/paper/paper-section";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Download } from "lucide-react";
+import { useReactToPrint } from "react-to-print";
+import toast from "react-hot-toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -19,6 +21,8 @@ export default function AssignmentPaperPage() {
 
   const id = params.id as string;
 
+  const paperRef = useRef<HTMLDivElement | null>(null);
+
   const [assignment, setAssignment] = useState<any>(null);
 
   const [loading, setLoading] = useState(true);
@@ -26,6 +30,11 @@ export default function AssignmentPaperPage() {
   const [progress, setProgress] = useState(0);
 
   const [step, setStep] = useState("queued");
+
+  const handlePrint = useReactToPrint({
+    contentRef: paperRef,
+    documentTitle: assignment?.title || "Assignment",
+  });
 
   const fetchAssignment = async () => {
     try {
@@ -57,10 +66,14 @@ export default function AssignmentPaperPage() {
     });
 
     socket.on("generation-completed", async () => {
+      toast.success("Assignment generated");
+
       await fetchAssignment();
     });
 
     socket.on("generation-failed", async () => {
+      toast.error("Generation failed");
+
       await fetchAssignment();
     });
 
@@ -85,7 +98,7 @@ export default function AssignmentPaperPage() {
 
   return (
     <div className="mx-auto max-w-4xl py-6">
-      <Card className="mb-5 overflow-hidden rounded-[28px] border-0 bg-[#111111] text-white shadow-xl print:hidden">
+      <Card className="print-hidden mb-5 overflow-hidden rounded-[28px] border-0 bg-[#111111] text-white shadow-xl">
         <div className="p-6">
           <div className="max-w-3xl">
             <h2 className="text-[20px] font-semibold leading-[32px] tracking-[-0.02em]">
@@ -93,7 +106,7 @@ export default function AssignmentPaperPage() {
               syllabus and requested question configuration.
             </h2>
 
-            <p className="mt-2 text-xs text-white/60">
+            <p className="mt-2 text-xs text-gray-400">
               Generated for{" "}
               <span className="font-medium text-white">
                 {assignment.createdBy?.name || "Teacher"}
@@ -102,24 +115,33 @@ export default function AssignmentPaperPage() {
           </div>
 
           <div className="mt-6">
-            <Button className="h-11 rounded-full bg-white px-5 text-sm font-semibold text-black transition-all hover:scale-[1.02] hover:bg-neutral-200">
+            <Button
+              onClick={handlePrint}
+              className="h-11 rounded-full bg-white px-5 text-sm font-semibold text-black transition-all hover:scale-[1.02] hover:bg-gray-200"
+            >
               <Download className="mr-2 h-4 w-4" />
               Download as PDF
             </Button>
           </div>
         </div>
       </Card>
-      <div className="min-h-screen bg-white p-10 text-black shadow-xl">
-        <PaperHeader
-          title={assignment.title}
-          subject={assignment.subject}
-          totalMarks={assignment.totalMarks}
-        />
 
-        <div className="mt-10">
-          {generatedPaper.sections.map((section: any, index: number) => (
-            <PaperSection key={index} section={section} />
-          ))}
+      <div className="bg-white p-6">
+        <div
+          ref={paperRef}
+          className="mx-auto min-h-screen max-w-[210mm] bg-white p-10 text-black"
+        >
+          <PaperHeader
+            title={assignment.title}
+            subject={assignment.subject}
+            totalMarks={assignment.totalMarks}
+          />
+
+          <div className="mt-10">
+            {generatedPaper.sections.map((section: any, index: number) => (
+              <PaperSection key={index} section={section} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
