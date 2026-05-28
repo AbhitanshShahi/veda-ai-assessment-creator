@@ -50,8 +50,6 @@ export const assignmentWorker = new Worker(
       const { validatedResponse, rawResponse } = await generateAssignmentPaper({
         subject: assignment.subject,
 
-        difficulty: assignment.difficulty,
-
         questionCount: assignment.questionCount,
 
         totalMarks: assignment.totalMarks,

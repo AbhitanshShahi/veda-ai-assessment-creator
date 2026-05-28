@@ -3,6 +3,7 @@ import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 
 import { UserModel } from "../models/users.model.js";
+import type { IUser } from "../models/users.model.js";
 
 import { signupSchema, loginSchema } from "../schemas/auth.schema.js";
 
@@ -25,21 +26,20 @@ export const signup = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(validatedData.password, 10);
 
-    const user = await UserModel.create({
-      ...validatedData,
-
+    const user: IUser = await UserModel.create({
+      name: validatedData.name,
+      email: validatedData.email,
       password: hashedPassword,
+      schoolName: validatedData.schoolName,
+      selectedClass: Number(validatedData.selectedClass),
     });
 
-    const token = generateToken(user._id.toString());
+    const token = generateToken(user._id!.toString());
 
     res.cookie("token", token, {
       httpOnly: true,
-
       secure: false,
-
       sameSite: "lax",
-
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -48,20 +48,15 @@ export const signup = async (req: Request, res: Response) => {
 
       user: {
         _id: user._id,
-
         name: user.name,
-
         email: user.email,
-
         schoolName: user.schoolName,
-
         selectedClass: user.selectedClass,
       },
     });
   } catch (error: any) {
     res.status(400).json({
       success: false,
-
       message: error.message,
     });
   }

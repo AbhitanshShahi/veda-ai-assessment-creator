@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface User {
+export interface IUser {
   _id?: mongoose.Types.ObjectId;
 
   name: string;
@@ -19,7 +19,7 @@ export interface User {
 }
 
 const userSchema =
-  new mongoose.Schema<User>(
+  new mongoose.Schema<IUser>(
     {
       name: {
         type: String,
@@ -61,7 +61,7 @@ const userSchema =
   );
 
 export const UserModel =
-  mongoose.model<User>(
+  mongoose.model<IUser>(
     "User",
     userSchema,
   );

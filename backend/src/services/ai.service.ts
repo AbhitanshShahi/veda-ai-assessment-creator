@@ -11,8 +11,6 @@ const openai = new OpenAI({
 type GenerateAssignmentInput = {
   subject: string;
 
-  difficulty: string;
-
   questionCount: number;
 
   totalMarks: number;
