@@ -23,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function AssignmentsPage() {
   const router = useRouter();
@@ -58,6 +59,8 @@ export default function AssignmentsPage() {
   }, [assignments, searchQuery, sortBy]);
 
   const handleDeleteAssignment = async (assignmentId: string) => {
+    const toastId = toast.loading("Deleting assignment...");
+
     try {
       await axios.delete(
         `${process.env.NEXT_PUBLIC_API_URL}/assignments/${assignmentId}`,
@@ -67,8 +70,16 @@ export default function AssignmentsPage() {
       );
 
       await fetchAssignments();
+
+      toast.success("Assignment deleted", {
+        id: toastId,
+      });
     } catch (error) {
       console.error(error);
+
+      toast.error("Failed to delete assignment", {
+        id: toastId,
+      });
     }
   };
 

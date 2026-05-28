@@ -16,7 +16,7 @@ export default function PaperSection({ section }: Props) {
       <div className="mt-6">
         <h3 className="text-lg font-semibold">{section.title}</h3>
 
-        <p className="mt-1 text-sm italic text-muted-foreground">
+        <p className="mt-1 text-sm italic text-gray-500">
           {section.instruction}
         </p>
       </div>

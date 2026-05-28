@@ -132,3 +132,27 @@
     @apply font-sans;
   }
 }
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  .print-hidden {
+    display: none !important;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  * {
+    box-shadow: none !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm;
+  }
+}
+
