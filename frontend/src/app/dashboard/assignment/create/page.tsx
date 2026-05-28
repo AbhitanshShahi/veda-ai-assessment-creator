@@ -261,7 +261,7 @@ export default function CreateAssignmentPage() {
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
             placeholder="Generate conceptual and application-based questions..."
-            className="min-h-[120px] rounded-3xl"
+            className="min-h-30 rounded-3xl"
           />
         </div>
 

@@ -136,7 +136,7 @@ export default function AssignmentsPage() {
             setSortBy(value as "latest" | "oldest" | "none")
           }
         >
-          <SelectTrigger className="h-10 w-[190px] rounded-xl border-border bg-background/80 backdrop-blur-sm transition-all duration-300 hover:border-black/10 focus:ring-2 focus:ring-black/5">
+          <SelectTrigger className="h-10 w-47.5 rounded-xl border-border bg-background/80 backdrop-blur-sm transition-all duration-300 hover:border-black/10 focus:ring-2 focus:ring-black/5">
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4" />
 

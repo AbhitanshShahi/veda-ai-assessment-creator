@@ -101,7 +101,7 @@ export default function AssignmentPaperPage() {
       <Card className="print-hidden mb-5 overflow-hidden rounded-[28px] border-0 bg-[#111111] text-white shadow-xl">
         <div className="p-6">
           <div className="max-w-3xl">
-            <h2 className="text-[20px] font-semibold leading-[32px] tracking-[-0.02em]">
+            <h2 className="text-[20px] font-semibold leading-8 tracking-[-0.02em]">
               Here is your AI-generated question paper based on the uploaded
               syllabus and requested question configuration.
             </h2>

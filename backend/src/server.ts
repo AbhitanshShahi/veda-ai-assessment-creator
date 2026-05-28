@@ -5,7 +5,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { connectDB } from "./lib/db.js";
 import redisClient from "./lib/redis.js";
-import { assignmentWorker } from "./workers/assignment.worker.js";
+import "./workers/assignment.worker.js";
 import assignmentRouter from "./routes/assignment.route.js";
 import authRouter from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
